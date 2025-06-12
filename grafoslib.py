@@ -170,7 +170,43 @@ class Grafo:
         visitado = set()
 
         self.__DFSUtil_matriz(v, visitado)
-        
+
+    def BFS_por_lista(self, v):
+        visitado = set()
+        fila = []
+
+        fila.append(v)
+        visitado.add(v)
+
+        while fila:
+            v = fila.pop(0)
+            print(v, end=" ")
+
+            for vizinho in self.lista_ajacencia[self.indexes_vertices[v]]:
+                if vizinho[0] not in visitado:
+                    fila.append(vizinho[0])
+                    visitado.add(vizinho[0])
+    
+    def BFS_por_matriz(self, v):
+        visitado = set()
+        fila = []
+
+        fila.append(v)
+        visitado.add(v)
+
+        while fila:
+            v = fila.pop(0)
+            print(v, end=" ")
+
+            for vizinho in self.matriz_adjacencia[self.indexes_vertices[v]]:
+                if len(vizinho) > 0:
+                    for tupla in vizinho:
+                        if tupla[0] not in visitado: 
+                            fila.append(tupla[0])
+                            visitado.add(tupla[0])
+                        elif tupla[1] not in visitado:
+                            fila.append(tupla[1])
+                            visitado.add(tupla[1])
 
 class Aresta:
 

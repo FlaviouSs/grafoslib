@@ -22,7 +22,7 @@ class Grafo:
 
         aux = lines[0].split()
 
-        if aux == 3:
+        if len(aux) == 3:
             self.flag_peso = True
         
         if self.flag_peso:
@@ -76,3 +76,8 @@ class Aresta:
         self.vertice2 = vertice2
         self.peso = peso
 
+    def __str__(self):
+        return f"{self.vertice1} - {self.vertice2} (peso:{self.peso})"
+
+    def __repr__(self):
+        return self.__str__()

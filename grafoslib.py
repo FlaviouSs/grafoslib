@@ -140,6 +140,38 @@ class Grafo:
         
         self.matriz_adjacencia = matriz
 
+    def __DFSUtil_lista(self, v, visitado):
+        visitado.add(v)
+        print(v, end=" ")
+
+        for vizinho in self.lista_ajacencia[self.indexes_vertices[v]]:
+            if vizinho[0] not in visitado:
+                self.__DFSUtil_lista(vizinho[0], visitado)
+
+    def DFS_por_lista(self, v):
+        visitado = set()
+
+        self.__DFSUtil_lista(v, visitado)
+
+    def __DFSUtil_matriz(self, v, visitado):
+        visitado.add(v)
+        print(v, end=" ")
+
+        for vizinho in self.matriz_adjacencia[self.indexes_vertices[v]]:
+            if len(vizinho) > 0:
+                for tupla in vizinho:
+                    if tupla[0] not in visitado:
+                        self.__DFSUtil_matriz(tupla[0], visitado)
+                    elif tupla[1] not in visitado:
+                        self.__DFSUtil_matriz(tupla[1], visitado)
+
+
+    def DFS_por_matriz(self, v):
+        visitado = set()
+
+        self.__DFSUtil_matriz(v, visitado)
+        
+
 class Aresta:
 
     def __init__(self, vertice1, vertice2, peso=None):

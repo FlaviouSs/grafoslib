@@ -53,6 +53,11 @@ class Grafo:
 
                     self.arestas.append(Aresta(vertice1, vertice2))
 
+        if(self.numeroVertices > len(self.vertices)):
+            for i in range(max(self.vertices) + 1, self.numeroVertices + 1):
+                self.vertices.add(i)
+
+
         for v in sorted(self.vertices):
             self.indexes_vertices[v] = curret_free_index
             curret_free_index += 1
@@ -140,63 +145,74 @@ class Grafo:
         
         self.matriz_adjacencia = matriz
 
-    def __DFSUtil_lista(self, v, visitado):
+    def __DFSUtil_lista(self, v, visitado, resultado):
         visitado.add(v)
-        print(v, end=" ")
+        #print(v, end=" ")
+        resultado.append(v)
 
         for vizinho in self.lista_ajacencia[self.indexes_vertices[v]]:
             if vizinho[0] not in visitado:
-                self.__DFSUtil_lista(vizinho[0], visitado)
+                self.__DFSUtil_lista(vizinho[0], visitado, resultado)
 
     def DFS_por_lista(self, v):
         visitado = set()
+        resultado = []
+        self.__DFSUtil_lista(v, visitado, resultado)
+        return resultado
 
-        self.__DFSUtil_lista(v, visitado)
-
-    def __DFSUtil_matriz(self, v, visitado):
+    def __DFSUtil_matriz(self, v, visitado, resultado):
         visitado.add(v)
-        print(v, end=" ")
+        #print(v, end=" ")
+        resultado.append(v)
 
         for vizinho in self.matriz_adjacencia[self.indexes_vertices[v]]:
             if len(vizinho) > 0:
                 for tupla in vizinho:
                     if tupla[0] not in visitado:
-                        self.__DFSUtil_matriz(tupla[0], visitado)
+                        self.__DFSUtil_matriz(tupla[0], visitado, resultado)
                     elif tupla[1] not in visitado:
-                        self.__DFSUtil_matriz(tupla[1], visitado)
+                        self.__DFSUtil_matriz(tupla[1], visitado, resultado)
+        
 
 
     def DFS_por_matriz(self, v):
         visitado = set()
-
-        self.__DFSUtil_matriz(v, visitado)
+        resultado = []
+        self.__DFSUtil_matriz(v, visitado, resultado)
+        return resultado
 
     def BFS_por_lista(self, v):
         visitado = set()
         fila = []
+        resultado = []
 
         fila.append(v)
         visitado.add(v)
 
         while fila:
             v = fila.pop(0)
-            print(v, end=" ")
+            #print(v, end=" ")
+            resultado.append(v)
 
             for vizinho in self.lista_ajacencia[self.indexes_vertices[v]]:
                 if vizinho[0] not in visitado:
                     fila.append(vizinho[0])
                     visitado.add(vizinho[0])
+        
+        return resultado
     
     def BFS_por_matriz(self, v):
         visitado = set()
         fila = []
+        resultado = []
 
         fila.append(v)
         visitado.add(v)
 
         while fila:
             v = fila.pop(0)
-            print(v, end=" ")
+            #print(v, end=" ")
+            resultado.append(v)
 
             for vizinho in self.matriz_adjacencia[self.indexes_vertices[v]]:
                 if len(vizinho) > 0:
@@ -207,6 +223,24 @@ class Grafo:
                         elif tupla[1] not in visitado:
                             fila.append(tupla[1])
                             visitado.add(tupla[1])
+        
+        return resultado
+
+    def encontrar_componentes_conexos(self):
+        
+        self.gerar_lista_adjacencia()
+
+        visitado = set()
+        componentes = []
+        for v in self.vertices:
+            if v not in visitado:
+                componente = sorted(self.BFS_por_lista(v))
+                componentes.append(componente)
+                visitado.update(componente)
+
+        componentes.sort(key=len, reverse=True)
+
+        return componentes
 
 class Aresta:
 

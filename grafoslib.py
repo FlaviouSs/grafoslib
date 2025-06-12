@@ -37,13 +37,6 @@ class Grafo:
                 self.vertices.add(vertice1)
                 self.vertices.add(vertice2)
                 self.numeroAresta += 1
-                
-                if(vertice1 not in self.indexes_vertices.values()):
-                    self.indexes_vertices[curret_free_index] = vertice1
-                    curret_free_index += 1
-                if(vertice2 not in self.indexes_vertices.values()):
-                    self.indexes_vertices[curret_free_index] = vertice2
-                    curret_free_index += 1
 
                 self.arestas.append(Aresta(vertice1, vertice2, peso))
 
@@ -58,14 +51,11 @@ class Grafo:
                     self.vertices.add(vertice2)
                     self.numeroAresta += 1
 
-                    if(vertice1 not in self.indexes_vertices.values()):
-                        self.indexes_vertices[curret_free_index] = vertice1
-                        curret_free_index += 1
-                    if(vertice2 not in self.indexes_vertices.values()):
-                        self.indexes_vertices[curret_free_index] = vertice2
-                        curret_free_index += 1
-
                     self.arestas.append(Aresta(vertice1, vertice2))
+
+        for v in sorted(self.vertices):
+            self.indexes_vertices[v] = curret_free_index
+            curret_free_index += 1
                 
 
     def mapear_grau_dos_vertices(self):

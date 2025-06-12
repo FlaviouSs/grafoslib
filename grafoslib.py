@@ -109,7 +109,19 @@ class Grafo:
 
         return distribuicao
 
+    def processar_output(self, filename):
+        with open(filename, 'w') as f:
+            f.write(f"# n = {self.numeroVertices}\n")
+            f.write(f"# m = {self.numeroAresta}\n")
+            f.write(f"# d_medio = {self.calcular_grau_medio()}\n")
 
+            dist = self.distribuicao_empirica_graus()
+
+            for _ in dist.keys():
+                if(dist[_] != 0.0):
+                    f.write(f"{_} {dist[_]:.2f}\n")
+                else:
+                    f.write(f"{_} 0\n")
 
 class Aresta:
 

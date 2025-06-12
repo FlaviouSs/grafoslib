@@ -68,6 +68,48 @@ class Grafo:
                     self.arestas.append(Aresta(vertice1, vertice2))
                 
 
+    def mapear_grau_dos_vertices(self):
+        vertices = sorted(self.vertices)
+        mapeamento_graus = dict()
+
+        for v in vertices:
+            mapeamento_graus[v] = 0 
+
+        for v in vertices:
+            for a in self.arestas:
+                if (v == a.vertice1 or v == a.vertice2) and (a.vertice1 != a.vertice2):
+                    mapeamento_graus[v] += 1
+        
+        return mapeamento_graus
+    
+    def calcular_grau_medio(self):
+        return (2 * self.numeroAresta) / self.numeroVertices
+    
+    def distribuicao_empirica_graus(self):
+        mapeamento = self.mapear_grau_dos_vertices()
+        graus = set()
+        distribuicao = dict()
+        
+        for _ in mapeamento.values():
+            graus.add(_)
+
+        grau_min = min(graus)
+        grau_max = max(graus)
+
+        for _ in range(grau_min, grau_max + 1):
+            distribuicao[_] = 0
+
+        for grau in graus:
+            for v in mapeamento.keys():
+                if grau == mapeamento[v]:
+                    distribuicao[grau] += 1
+
+        for _ in distribuicao.keys():
+            distribuicao[_] = distribuicao[_] / self.numeroVertices
+
+        return distribuicao
+
+
 
 class Aresta:
 

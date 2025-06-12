@@ -11,3 +11,6 @@ print(g.arestas)
 print(g.indexes_vertices)
 
 g.processar_output("./output1.txt")
+g.gerar_lista_adjacencia()
+
+g.gerar_matriz_adjacencia()

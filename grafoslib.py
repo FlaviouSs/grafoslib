@@ -113,6 +113,33 @@ class Grafo:
                 else:
                     f.write(f"{_} 0\n")
 
+    def gerar_lista_adjacencia(self):
+        lista = []
+
+        for _ in range(0, self.numeroVertices):
+            lista.append([])
+
+        for v in self.vertices:
+            for a in self.arestas:
+                if v == a.vertice1:
+                    lista[self.indexes_vertices[v]].append((a.vertice2, a.peso))
+                elif v == a.vertice2:
+                    lista[self.indexes_vertices[v]].append((a.vertice1, a.peso))
+
+        self.lista_ajacencia = lista
+
+    def gerar_matriz_adjacencia(self):
+        matriz = [[[] for _ in range(self.numeroVertices)] for _ in range(self.numeroVertices)]
+
+        for v in self.vertices:
+            for a in self.arestas:
+                if v == a.vertice1:
+                    matriz[self.indexes_vertices[v]][self.indexes_vertices[a.vertice2]].append((a.vertice1, a.vertice2, a.peso))
+                elif v == a.vertice2:
+                    matriz[self.indexes_vertices[v]][self.indexes_vertices[a.vertice1]].append((a.vertice1, a.vertice2, a.peso))
+        
+        print(matriz)
+
 class Aresta:
 
     def __init__(self, vertice1, vertice2, peso=None):

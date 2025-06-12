@@ -138,7 +138,7 @@ class Grafo:
                 elif v == a.vertice2:
                     matriz[self.indexes_vertices[v]][self.indexes_vertices[a.vertice1]].append((a.vertice1, a.vertice2, a.peso))
         
-        print(matriz)
+        self.matriz_adjacencia = matriz
 
 class Aresta:
 

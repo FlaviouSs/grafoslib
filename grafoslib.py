@@ -124,25 +124,23 @@ class Grafo:
         for _ in range(0, self.numeroVertices):
             lista.append([])
 
-        for v in self.vertices:
-            for a in self.arestas:
-                if v == a.vertice1:
-                    lista[self.indexes_vertices[v]].append((a.vertice2, a.peso))
-                elif v == a.vertice2:
-                    lista[self.indexes_vertices[v]].append((a.vertice1, a.peso))
+        for a in self.arestas:
+            lista[self.indexes_vertices[a.vertice1]].append((a.vertice2, a.peso))
+            lista[self.indexes_vertices[a.vertice2]].append((a.vertice1, a.peso))
+
+        for i in range(len(lista)):
+            lista[i] = sorted(lista[i], key=lambda x: x[0])
+            
 
         self.lista_ajacencia = lista
 
     def gerar_matriz_adjacencia(self):
         matriz = [[[] for _ in range(self.numeroVertices)] for _ in range(self.numeroVertices)]
 
-        for v in self.vertices:
-            for a in self.arestas:
-                if v == a.vertice1:
-                    matriz[self.indexes_vertices[v]][self.indexes_vertices[a.vertice2]].append((a.vertice1, a.vertice2, a.peso))
-                elif v == a.vertice2:
-                    matriz[self.indexes_vertices[v]][self.indexes_vertices[a.vertice1]].append((a.vertice1, a.vertice2, a.peso))
-        
+        for a in self.arestas:
+            matriz[self.indexes_vertices[a.vertice1]][self.indexes_vertices[a.vertice2]].append((a.vertice1, a.vertice2, a.peso))
+            matriz[self.indexes_vertices[a.vertice2]][self.indexes_vertices[a.vertice1]].append((a.vertice1, a.vertice2, a.peso))
+
         self.matriz_adjacencia = matriz
 
     def __DFSUtil_lista(self, v, visitado, resultado):

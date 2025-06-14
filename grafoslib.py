@@ -143,86 +143,131 @@ class Grafo:
 
         self.matriz_adjacencia = matriz
 
-    def __DFSUtil_lista(self, v, visitado, resultado):
+    def __DFSUtil_lista(self, v, visitado, resultado, pai):
         visitado.add(v)
         #print(v, end=" ")
-        resultado.append(v)
+        resultado.append((v, pai))
 
         for vizinho in self.lista_ajacencia[self.indexes_vertices[v]]:
             if vizinho[0] not in visitado:
-                self.__DFSUtil_lista(vizinho[0], visitado, resultado)
+                self.__DFSUtil_lista(vizinho[0], visitado, resultado, v)
 
-    def DFS_por_lista(self, v):
+    def DFS_por_lista(self, v, output):
         visitado = set()
         resultado = []
-        self.__DFSUtil_lista(v, visitado, resultado)
-        return resultado
+        self.__DFSUtil_lista(v, visitado, resultado, "RAIZ")
+        
 
-    def __DFSUtil_matriz(self, v, visitado, resultado):
+        # Processamento do arquivo com base no resultado
+
+        niveis = {v: 0 for (v, _) in resultado}
+
+        for vertice, pai in resultado:
+            if pai != "RAIZ":
+                niveis[vertice] = niveis[pai] + 1
+
+        with open(output, 'w') as f:
+            f.write("Vertice,Pai,Nivel\n\n")
+            for vertice, pai in resultado:
+                f.write(f"{vertice},{pai},{niveis[vertice]}\n\n")
+
+
+
+
+    def __DFSUtil_matriz(self, v, visitado, resultado, pai):
         visitado.add(v)
         #print(v, end=" ")
-        resultado.append(v)
+        resultado.append((v, pai))
 
         for vizinho in self.matriz_adjacencia[self.indexes_vertices[v]]:
             if len(vizinho) > 0:
                 for tupla in vizinho:
                     if tupla[0] not in visitado:
-                        self.__DFSUtil_matriz(tupla[0], visitado, resultado)
+                        self.__DFSUtil_matriz(tupla[0], visitado, resultado, v)
                     elif tupla[1] not in visitado:
-                        self.__DFSUtil_matriz(tupla[1], visitado, resultado)
+                        self.__DFSUtil_matriz(tupla[1], visitado, resultado, v)
         
 
 
-    def DFS_por_matriz(self, v):
+    def DFS_por_matriz(self, v, output):
         visitado = set()
         resultado = []
-        self.__DFSUtil_matriz(v, visitado, resultado)
-        return resultado
+        self.__DFSUtil_matriz(v, visitado, resultado, "RAIZ")
+        
+        # Processamento do arquivo com base no resultado
 
-    def BFS_por_lista(self, v):
+        niveis = {v: 0 for (v, _) in resultado}
+
+        for vertice, pai in resultado:
+            if pai != "RAIZ":
+                niveis[vertice] = niveis[pai] + 1
+
+        with open(output, 'w') as f:
+            f.write("Vertice,Pai,Nivel\n\n")
+            for vertice, pai in resultado:
+                f.write(f"{vertice},{pai},{niveis[vertice]}\n\n")
+
+
+
+    def BFS_por_lista(self, v, output):
         visitado = set()
         fila = []
         resultado = []
+        niveis = {}
 
-        fila.append(v)
+        fila.append((v, "RAIZ"))
         visitado.add(v)
+        niveis[v] = 0
 
         while fila:
-            v = fila.pop(0)
+            v, pai = fila.pop(0)
             #print(v, end=" ")
-            resultado.append(v)
+            resultado.append((v, pai))
 
             for vizinho in self.lista_ajacencia[self.indexes_vertices[v]]:
                 if vizinho[0] not in visitado:
-                    fila.append(vizinho[0])
+                    fila.append((vizinho[0], v))
                     visitado.add(vizinho[0])
+                    niveis[vizinho[0]] = niveis[v] + 1
         
-        return resultado
+        
+        with open(output, 'w') as f:
+            f.write("Vertice,Pai,Nivel\n\n")
+            for vertice, pai in resultado:
+                f.write(f"{vertice},{pai},{niveis[vertice]}\n\n")
+
     
-    def BFS_por_matriz(self, v):
+    def BFS_por_matriz(self, v, output):
         visitado = set()
         fila = []
         resultado = []
+        niveis = {}
 
-        fila.append(v)
+        fila.append((v, "RAIZ"))
         visitado.add(v)
+        niveis[v] = 0
 
         while fila:
-            v = fila.pop(0)
+            v, pai = fila.pop(0)
             #print(v, end=" ")
-            resultado.append(v)
+            resultado.append((v, pai))
 
             for vizinho in self.matriz_adjacencia[self.indexes_vertices[v]]:
                 if len(vizinho) > 0:
                     for tupla in vizinho:
                         if tupla[0] not in visitado: 
-                            fila.append(tupla[0])
+                            fila.append((tupla[0], v))
                             visitado.add(tupla[0])
+                            niveis[tupla[0]] = niveis[v] + 1
                         elif tupla[1] not in visitado:
-                            fila.append(tupla[1])
+                            fila.append((tupla[1], v))
                             visitado.add(tupla[1])
+                            niveis[tupla[1]] = niveis[v] + 1
         
-        return resultado
+        with open(output, 'w') as f:
+            f.write("Vertice,Pai,Nivel\n\n")
+            for vertice, pai in resultado:
+                f.write(f"{vertice},{pai},{niveis[vertice]}\n\n")
 
     def encontrar_componentes_conexos(self):
         

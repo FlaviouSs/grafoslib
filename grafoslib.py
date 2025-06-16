@@ -273,11 +273,32 @@ class Grafo:
         
         self.gerar_lista_adjacencia()
 
+        def BFS_interno(v):
+            visitado = set()
+            fila = []
+            resultado = []
+
+            fila.append(v)
+            visitado.add(v)
+
+            while fila:
+                v = fila.pop(0)
+                #print(v, end=" ")
+                resultado.append(v)
+
+                for vizinho in self.lista_ajacencia[self.indexes_vertices[v]]:
+                    if vizinho[0] not in visitado:
+                        fila.append(vizinho[0])
+                        visitado.add(vizinho[0])
+        
+            return resultado
+        
+
         visitado = set()
         componentes = []
         for v in self.vertices:
             if v not in visitado:
-                componente = sorted(self.BFS_por_lista(v))
+                componente = sorted(BFS_interno(v))
                 componentes.append(componente)
                 visitado.update(componente)
 

@@ -304,7 +304,11 @@ class Grafo:
 
         componentes.sort(key=len, reverse=True)
 
-        return componentes
+
+        print(f"Número de componentes conexos no grafo: {len(componentes)}")
+        for componente in componentes:
+            print(f"{componente}\tTamanho = {len(componente)}")
+
 
 class Aresta:
 

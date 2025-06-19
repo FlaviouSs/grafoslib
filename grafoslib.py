@@ -309,6 +309,95 @@ class Grafo:
         for componente in componentes:
             print(f"{componente}\tTamanho = {len(componente)}")
 
+    def menor_caminho(self, origem, destino=None):
+        from collections import deque
+        import heapq
+
+        self.gerar_lista_adjacencia()
+
+        if not self.flag_peso:
+
+            distancias = {v: float('INF') for v in self.vertices}
+            pais = {v: None for v in self.vertices}
+            visitado = set()
+
+            fila = deque()
+            fila.append(origem)
+            distancias[origem] = 0
+            visitado.add(origem)
+
+            while fila:
+                atual = fila.popleft()
+
+                for vizinho in self.lista_ajacencia[self.indexes_vertices[atual]]:
+                    viz = vizinho[0]
+                    if viz not in visitado:
+                        visitado.add(viz)
+                        fila.append(viz)
+                        distancias[viz] = distancias[atual] + 1
+                        pais[viz] = atual
+
+            def reconstruir_caminho(dest):
+                if distancias[dest] == float('inf'):
+                    return []
+                caminho = []
+                atual = dest
+                while atual is not None:
+                    caminho.append(atual)
+                    atual = pais[atual]
+                caminho.reverse()
+                return caminho
+
+            if destino:
+                return distancias[destino], reconstruir_caminho(destino)
+
+            caminhos = {v: reconstruir_caminho(v) for v in self.vertices}
+            return distancias, caminhos
+        
+        else:
+
+            for a in self.arestas:
+                if a.peso is None or a.peso < 0:
+                    print("Atenção! Dijkstra requer todos os pesos >= 0!")
+                    return None, None
+
+
+            distancias = {v: float('inf') for v in self.vertices}
+            pais = {v: None for v in self.vertices}
+            distancias[origem] = 0
+
+            heap = [(0, origem)]
+
+            while heap:
+                dist_atual, atual = heapq.heappop(heap)
+
+                if dist_atual > distancias[atual]:
+                    continue
+
+                for vizinho, peso in self.lista_ajacencia[self.indexes_vertices[atual]]:
+                    nova_dist = distancias[atual] + peso
+                    if nova_dist < distancias[vizinho]:
+                        distancias[vizinho] = nova_dist
+                        pais[vizinho] = atual
+                        heapq.heappush(heap, (nova_dist, vizinho))
+            
+            def reconstruir_caminho(dest):
+                if distancias[dest] == float('inf'):
+                    return []
+                caminho = []
+                atual = dest
+                while atual is not None:
+                    caminho.append(atual)
+                    atual = pais[atual]
+                caminho.reverse()
+                return caminho
+
+            if destino:
+                return distancias[destino], reconstruir_caminho(destino)
+            
+            distancias_arredondadas = {v: round(d, 2) if d != float('inf') else float('inf') for v, d in distancias.items()}
+            caminhos = {v: reconstruir_caminho(v) for v in self.vertices}
+            return distancias_arredondadas, caminhos
 
 class Aresta:
 

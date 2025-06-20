@@ -19,9 +19,10 @@ g.BFS_por_matriz(1, "./output4.txt")
 
 #g.encontrar_componentes_conexos()
 
-# PARTE 2
+# ------------ PARTE 2 ------------
+
 print()
-distancias, caminhos = g.menor_caminho(origem=1, destino=2)
+distancias, caminhos = g.menor_caminho(origem=1)
 
 print(distancias)
 print(caminhos)
